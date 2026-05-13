@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+
+const allProjects = (await getCollection('projects'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const allTags = [...new Set(allProjects.flatMap(p => p.data.tags))].sort();
+---
+
+<BaseLayout title="Projects | Mohamed Ismail">
+  <section class="py-20 min-h-screen">
+    <div class="container mx-auto px-6">
+      <SectionHeading label="// ARCHIVES" title="Technical Case Studies" />
+      
+      <!-- Tag Filter (Client-side) -->
+      <div class="flex flex-wrap gap-3 mb-12" id="tag-filters">
+        <button 
+          class="px-4 py-2 rounded-lg glass text-sm font-mono font-bold text-mint active-filter transition-all border border-mint/50"
+          data-tag="all"
+        >
+          ALL_PROJECTS
+        </button>
+        {allTags.map(tag => (
+          <button 
+            class="px-4 py-2 rounded-lg glass text-sm font-mono font-bold text-slate-400 hover:text-mint hover:border-mint/30 transition-all border border-white/5"
+            data-tag={tag}
+          >
+            {tag.toUpperCase()}
+          </button>
+        ))}
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+        {allProjects.map((project) => (
+          <div class="project-item" data-tags={JSON.stringify(project.data.tags)}>
+            <ProjectCard 
+              title={project.data.title}
+              description={project.data.description}
+              tags={project.data.tags}
+              slug={project.slug}
+              featured={project.data.featured}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const filterButtons = document.querySelectorAll('#tag-filters button');
+  const projectItems = document.querySelectorAll('.project-item');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tag = button.getAttribute('data-tag');
+
+      // Update UI
+      filterButtons.forEach(btn => {
+        btn.classList.remove('text-mint', 'border-mint/50');
+        btn.classList.add('text-slate-400', 'border-white/5');
+      });
+      button.classList.add('text-mint', 'border-mint/50');
+      button.classList.remove('text-slate-400', 'border-white/5');
+
+      // Filter projects
+      projectItems.forEach(item => {
+        const itemTags = JSON.parse(item.getAttribute('data-tags') || '[]');
+        if (tag === 'all' || itemTags.includes(tag)) {
+          (item as HTMLElement).style.display = 'block';
+        } else {
+          (item as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

@@ -1,0 +1,45 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import SkillBadge from './SkillBadge.astro';
+
+const row1 = [
+  'SIEM', 'Splunk', 'Elastic Stack', 'Wireshark', 'OSINT', 
+  'Nmap', 'Burp Suite', 'Python', 'Linux', 'Metasploit'
+];
+
+const row2 = [
+  'Threat Intelligence', 'Incident Response', 'Active Directory', 
+  'Network Security', 'Penetration Testing', 'CrowdStrike',
+  'Digital Forensics', 'Cloud Security', 'Kubernetes', 'Docker'
+];
+---
+
+<section class="py-24 bg-slate-900/50">
+  <div class="container mx-auto px-6">
+    <SectionHeading label="// ARSENAL" title="Technical Proficiencies" centered />
+  </div>
+
+  <div class="flex flex-col gap-6 overflow-hidden">
+    <!-- Row 1: Left to Right -->
+    <div class="flex whitespace-nowrap">
+      <div class="flex gap-4 animate-marquee py-2">
+        {[...row1, ...row1].map((skill) => (
+          <SkillBadge class="text-sm px-6 py-2">
+            {skill}
+          </SkillBadge>
+        ))}
+      </div>
+    </div>
+
+    <!-- Row 2: Right to Left -->
+    <div class="flex whitespace-nowrap">
+      <div class="flex gap-4 animate-marquee-reverse py-2">
+        {[...row2, ...row2].map((skill) => (
+          <SkillBadge class="text-sm px-6 py-2">
+            {skill}
+          </SkillBadge>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

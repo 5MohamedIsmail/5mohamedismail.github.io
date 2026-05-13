@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SkillBadge from '../../components/SkillBadge.astro';
+import { Github, ExternalLink, ArrowLeft, Calendar, Clock } from 'lucide-react';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await project.render();
+
+const formattedDate = new Date(project.data.pubDate).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+// Simple reading time estimate
+const wordsPerMinute = 200;
+const words = project.body.split(/\s+/g).length;
+const readingTime = Math.ceil(words / wordsPerMinute);
+---
+
+<BaseLayout title={`${project.data.title} | Mohamed Ismail`}>
+  <article class="py-20">
+    <div class="container mx-auto px-6 max-w-4xl">
+      <a 
+        href="/projects" 
+        class="inline-flex items-center gap-2 text-slate-500 hover:text-mint transition-colors mb-12 group"
+      >
+        <ArrowLeft size={18} class="group-hover:-translate-x-1 transition-transform" />
+        Back to projects
+      </a>
+
+      <header class="mb-12">
+        <div class="flex flex-wrap gap-4 items-center text-sm text-slate-500 mb-6 font-mono">
+          <div class="flex items-center gap-2">
+            <Calendar size={16} />
+            {formattedDate}
+          </div>
+          <div class="flex items-center gap-2">
+            <Clock size={16} />
+            {readingTime} min read
+          </div>
+        </div>
+
+        <h1 class="text-4xl md:text-6xl font-black text-slate-50 mb-8 leading-tight">
+          {project.data.title}
+        </h1>
+
+        <div class="flex flex-wrap gap-3 mb-10">
+          {project.data.tags.map((tag) => (
+            <SkillBadge class="text-sm px-4 py-1.5">{tag}</SkillBadge>
+          ))}
+        </div>
+
+        <div class="flex flex-wrap gap-6">
+          {project.data.github && (
+            <a 
+              href={project.data.github} 
+              target="_blank" 
+              class="flex items-center gap-2 text-slate-300 hover:text-mint transition-colors"
+            >
+              <Github size={20} />
+              <span class="font-mono text-sm font-bold">SOURCE_CODE</span>
+            </a>
+          )}
+          {project.data.live && (
+            <a 
+              href={project.data.live} 
+              target="_blank" 
+              class="flex items-center gap-2 text-slate-300 hover:text-mint transition-colors"
+            >
+              <ExternalLink size={20} />
+              <span class="font-mono text-sm font-bold">LIVE_DEMO</span>
+            </a>
+          )}
+        </div>
+      </header>
+
+      <div class="prose prose-invert prose-slate lg:prose-xl">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
