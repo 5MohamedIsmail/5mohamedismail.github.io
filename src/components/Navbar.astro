@@ -1,0 +1,91 @@
+---
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About" },
+  { href: "/projects", label: "Projects" },
+  { href: "/blog", label: "Blog" },
+];
+---
+
+<header class="sticky top-0 z-50 w-full glass border-b border-border transition-colors duration-300">
+  <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+    <a href="/" class="text-2xl font-headings font-bold text-primary tracking-tighter">
+      MI.
+    </a>
+
+    <nav class="hidden md:flex items-center space-x-8">
+      {navLinks.map(link => (
+        <a href={link.href} class="text-sm font-medium hover:text-primary transition-colors">
+          {link.label}
+        </a>
+      ))}
+      <button
+        class="theme-toggle p-2 rounded-full hover:bg-primary/10 transition-colors"
+        aria-label="Toggle dark mode"
+      >
+        <svg class="sun-icon hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
+        </svg>
+        <svg class="moon-icon hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 118.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="md:hidden flex items-center space-x-4">
+      <button class="theme-toggle p-2 rounded-full hover:bg-primary/10" aria-label="Toggle dark mode">
+        <svg class="sun-icon hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 100 14 7 7 0 000-14z" />
+        </svg>
+        <svg class="moon-icon hidden w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 118.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+      
+      <!-- Basic Mobile Nav Toggle (can be expanded) -->
+      <button class="p-2" aria-label="Menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const getTheme = () => {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+    return 'light';
+  };
+
+  const setIcons = (t: string | null) => {
+    const sunIcons = document.querySelectorAll('.sun-icon');
+    const moonIcons = document.querySelectorAll('.moon-icon');
+    if (t === 'dark') {
+      sunIcons.forEach(i => i.classList.remove('hidden'));
+      moonIcons.forEach(i => i.classList.add('hidden'));
+    } else {
+      sunIcons.forEach(i => i.classList.add('hidden'));
+      moonIcons.forEach(i => i.classList.remove('hidden'));
+    }
+  };
+
+  const theme = getTheme();
+  setIcons(theme);
+
+  const toggles = document.querySelectorAll('.theme-toggle');
+  toggles.forEach(toggle => {
+    toggle.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      setIcons(newTheme);
+    });
+  });
+</script>

@@ -1,0 +1,32 @@
+---
+interface Props {
+  experience: {
+    company: string;
+    role: string;
+    startDate: string;
+    endDate: string;
+    description: string;
+  }[];
+}
+
+const { experience } = Astro.props;
+---
+
+<div class="relative border-l border-border ml-3 space-y-12 pb-10">
+  {experience.map(item => (
+    <div class="relative pl-8">
+      <!-- Dot -->
+      <div class="absolute -left-1.5 top-1.5 w-3 h-3 bg-primary rounded-full border-2 border-bg"></div>
+      
+      <div class="flex flex-col sm:flex-row sm:items-baseline justify-between mb-2">
+        <h3 class="text-xl font-headings text-primary">{item.role}</h3>
+        <span class="text-sm text-muted font-medium">{item.startDate} — {item.endDate}</span>
+      </div>
+      
+      <div class="text-lg font-medium mb-3">{item.company}</div>
+      <p class="text-muted text-sm leading-relaxed max-w-2xl">
+        {item.description}
+      </p>
+    </div>
+  ))}
+</div>

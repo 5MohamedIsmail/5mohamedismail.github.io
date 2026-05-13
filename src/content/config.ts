@@ -1,17 +1,42 @@
-import { z, defineCollection } from 'astro:content';
+import { defineCollection, z } from 'astro:content';
 
 const projects = defineCollection({
   type: 'content',
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    pubDate: z.coerce.date(),
     tags: z.array(z.string()),
-    featured: z.boolean().default(false),
     github: z.string().url().optional(),
-    live: z.string().url().optional(),
-    image: z.string().optional(),
+    demo: z.string().url().optional(),
+    featured: z.boolean().default(false),
+    date: z.date(),
   }),
 });
 
-export const collections = { projects };
+const posts = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.date(),
+    tags: z.array(z.string()),
+    draft: z.boolean().default(false),
+  }),
+});
+
+const experience = defineCollection({
+  type: 'content',
+  schema: z.object({
+    company: z.string(),
+    role: z.string(),
+    startDate: z.string(),
+    endDate: z.string(), // "Present" or date string
+    description: z.string(),
+  }),
+});
+
+export const collections = {
+  projects,
+  posts,
+  experience,
+};

@@ -1,88 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --color-mint: 90 214 168;
-    --color-indigo: 99 102 241;
+    --bg-rgb: 247, 246, 242;
+    --primary-rgb: 1, 105, 111;
+    --text-rgb: 23, 22, 20;
+    
+    --bg: rgb(var(--bg-rgb));
+    --primary: rgb(var(--primary-rgb));
+    --primary-foreground: #ffffff;
+    --text: rgb(var(--text-rgb));
+    --text-muted: #4a4a4a;
+    --border: #e2e2e2;
+    
+    /* 4px spacing system */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-20: 80px;
+    --space-24: 96px;
+    --space-32: 128px;
+
+    --font-headings: 'Instrument Serif', serif;
+    --font-body: 'Work Sans', sans-serif;
   }
 
-  html {
-    @apply bg-slate-950 text-slate-300 scroll-smooth;
-    font-family: 'Inter', sans-serif;
+  [data-theme='dark'] {
+    --bg-rgb: 23, 22, 20;
+    --primary-rgb: 79, 152, 163;
+    --text-rgb: 247, 246, 242;
+    
+    --bg: rgb(var(--bg-rgb));
+    --primary: rgb(var(--primary-rgb));
+    --primary-foreground: #171614;
+    --text: rgb(var(--text-rgb));
+    --text-muted: #a0a0a0;
+    --border: #2d2d2d;
   }
 
   body {
-    @apply min-h-screen flex flex-col overflow-x-hidden;
+    @apply bg-[var(--bg)] text-[var(--text)] transition-colors duration-300;
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+    line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply text-slate-50 font-bold;
+    font-family: var(--font-headings);
+    @apply font-normal;
   }
 
-  /* Custom Scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    @apply bg-slate-950;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    @apply bg-slate-800 rounded-full border-2 border-slate-950 hover:bg-slate-700 transition-colors;
+  a {
+    @apply transition-colors duration-200;
   }
 }
 
-@layer components {
+@layer utilities {
+  .hero-title {
+    font-size: clamp(3rem, 7vw, 8rem);
+    line-height: 0.9;
+  }
+
   .glass {
-    @apply bg-white/5 backdrop-blur-md border border-white/10;
+    @apply bg-opacity-70 backdrop-blur-md;
   }
-
-  .text-glow {
-    text-shadow: 0 0 10px rgba(90, 214, 168, 0.3);
-  }
-
-  .mint-glow {
-    box-shadow: 0 0 30px rgba(90, 214, 168, 0.15);
-  }
-
-  .mint-glow-hover {
-    @apply transition-shadow duration-300;
-  }
-
-  .mint-glow-hover:hover {
-    box-shadow: 0 0 30px rgba(90, 214, 168, 0.3);
-  }
-}
-
-/* Noise Filter */
-.noise-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  opacity: 0.03;
-  z-index: 9999;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3column%3filter id='noiseFilter'%3column%3feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3column%3/filter%3column%3rect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3column%3/svg%3column%");
-}
-
-/* Prose overrides */
-.prose {
-  @apply max-w-none;
-}
-
-.prose a {
-  @apply text-mint no-underline hover:underline transition-all;
-}
-
-.prose code {
-  @apply font-mono bg-white/10 px-1.5 py-0.5 rounded text-mint before:content-[''] after:content-[''];
-}
-
-.prose pre {
-  @apply border border-white/10 rounded-xl bg-slate-900/50 !important;
 }

@@ -1,19 +1,21 @@
 ---
 interface Props {
-  label: string;
   title: string;
+  subtitle?: string;
   centered?: boolean;
 }
 
-const { label, title, centered = false } = Astro.props;
+const { title, subtitle, centered = false } = Astro.props;
 ---
 
-<div class:list={["mb-12", centered ? "text-center" : "text-left"]}>
-  <p class="font-mono text-xs font-bold text-mint uppercase tracking-[0.2em] mb-3">
-    {label}
-  </p>
-  <h2 class="text-3xl md:text-4xl font-bold text-slate-50 relative inline-block">
+<div class={`mb-12 ${centered ? 'text-center' : ''}`}>
+  <h2 class="text-4xl md:text-5xl font-headings text-primary mb-4 tracking-tight">
     {title}
-    <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-gradient-to-r from-mint to-transparent rounded-full"></span>
   </h2>
+  {subtitle && (
+    <p class="text-muted text-lg max-w-2xl mx-auto">
+      {subtitle}
+    </p>
+  )}
+  <div class={`h-1 w-20 bg-primary/20 mt-4 ${centered ? 'mx-auto' : ''}`}></div>
 </div>
