@@ -6,11 +6,13 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  isHome?: boolean;
 }
 
 const { 
   title = "Mohamed Ismail | Security Engineer", 
-  description = "Security Engineer & Full-Stack Developer specializing in OSINT and SIEM." 
+  description = "Security Engineer & Full-Stack Developer specializing in OSINT and SIEM.",
+  isHome = false
 } = Astro.props;
 ---
 
@@ -19,10 +21,16 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta http-equiv="X-Frame-Options" content="DENY">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Theme Script to prevent flash -->
     <script is:inline>
@@ -45,9 +53,9 @@ const {
   </head>
   <body class="min-h-screen flex flex-col">
     <Navbar />
-    <main class="flex-grow container mx-auto px-4 py-8">
+    <main class="flex-grow flex flex-col">
       <slot />
     </main>
-    <Footer />
+    <Footer isHome={isHome} />
   </body>
 </html>
